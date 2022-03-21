@@ -12,6 +12,14 @@ terraform {
   }
 
   required_version = ">= 1.1.7"
+
+  cloud {
+    organization = "tadyjp"
+
+    workspaces {
+      name = "home-IoT"
+    }
+  }
 }
 
 provider "aws" {
