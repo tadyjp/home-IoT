@@ -24,19 +24,15 @@ resource "aws_dynamodb_table" "nature_remo_sensor" {
 # Lambda
 ################################################################################
 
-locals {
-  function_name = "nature_remo_to_dynamo"
-}
-
 data "archive_file" "nature_remo_to_dynamo" {
   type        = "zip"
   source_dir  = "lambda"
-  output_path = "archive/${local.function_name}.zip"
+  output_path = "archive/nature_remo_to_dynamo.zip"
 }
 
 resource "aws_lambda_function" "nature_remo_to_dynamo" {
-  function_name = local.function_name
-  handler       = "${local.function_name}.handler"
+  function_name = "nature_remo_to_dynamo"
+  handler       = "nature_remo_to_dynamo.handler"
   role          = aws_iam_role.lambda_dynamodb_writer.arn
   runtime       = "nodejs12.x"
 
@@ -50,7 +46,7 @@ resource "aws_lambda_function" "nature_remo_to_dynamo" {
   #   }
   # }
 
-  depends_on = [aws_cloudwatch_log_group.lambda_log_group]
+  depends_on = [aws_cloudwatch_log_group.nature_remo_to_dynamo]
 }
 
 resource "aws_iam_role" "nature_remo_to_dynamo" {
@@ -82,5 +78,5 @@ resource "aws_iam_role" "nature_remo_to_dynamo" {
 ################################################################################
 
 resource "aws_cloudwatch_log_group" "nature_remo_to_dynamo" {
-  name = "/aws/lambda/${local.function_name}"
+  name = "/aws/lambda/nature_remo_to_dynamo"
 }
