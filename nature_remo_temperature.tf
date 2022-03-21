@@ -32,6 +32,6 @@ resource "aws_dynamodb_table" "nature_remo_sensor" {
     type = "N"
   }
 
-  hash_key  = "UserId"
-  range_key = "GameTitle"
+  hash_key  = "DeviceID"
+  range_key = "Timestamp"
 }
