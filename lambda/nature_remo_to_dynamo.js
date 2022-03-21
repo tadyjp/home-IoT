@@ -5,11 +5,11 @@ exports.handler = async (event) => {
 
     const item = {
       DeviceID: {S: "id1"},
-      Timestamp: {N: Date.now()/1000},
-      Temperature: {N: 28},
-      Humidity: {N: 32},
-      Illuminance: {N: 0.1},
-      Motion: {N: 1}
+      Timestamp: {N: (Date.now()/1000).toString()},
+      Temperature: {N: "28"},
+      Humidity: {N: "32"},
+      Illuminance: {N: "0.1"},
+      Motion: {N: "1"}
     };
 
     const res= await dynamoPutItem({
