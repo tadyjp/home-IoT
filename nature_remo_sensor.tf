@@ -33,7 +33,7 @@ data "archive_file" "nature_remo_to_dynamo" {
 resource "aws_lambda_function" "nature_remo_to_dynamo" {
   function_name = "nature_remo_to_dynamo"
   handler       = "nature_remo_to_dynamo.handler"
-  role          = aws_iam_role.lambda_dynamodb_writer.arn
+  role          = aws_iam_role.nature_remo_to_dynamo.arn
   runtime       = "nodejs12.x"
 
   filename         = data.archive_file.nature_remo_to_dynamo.output_path
