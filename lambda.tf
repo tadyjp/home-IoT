@@ -10,17 +10,17 @@ data "archive_file" "soracom_button_to_slack" {
 
 resource "aws_lambda_function" "soracom_button_to_slack" {
   function_name = local.function_name
-  handler       = "${local.function_name}.handler"
+  handler       = "index.handler"
   role          = aws_iam_role.lambda_kinesis_execution.arn
-  runtime       = "nodejs12.x"
+  runtime       = "nodejs14.x"
 
   filename         = data.archive_file.soracom_button_to_slack.output_path
   source_code_hash = data.archive_file.soracom_button_to_slack.output_base64sha256
 
   environment {
     variables = {
-      slack_url           = var.slack_url
-      mailbox_button_imei = var.mailbox_button_imei
+      SLACK_URL           = var.slack_url
+      MAINBOX_BUTTON_IMEI = var.mailbox_button_imei
     }
   }
 

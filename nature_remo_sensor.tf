@@ -3,7 +3,7 @@
 ################################################################################
 
 resource "aws_dynamodb_table" "nature_remo_sensor" {
-  name         = "nature-remo-sensor"
+  name         = "nature-remo-sensor-2"
   billing_mode = "PAY_PER_REQUEST"
 
   attribute {
@@ -34,7 +34,7 @@ resource "aws_lambda_function" "nature_remo_to_dynamo" {
   function_name = "nature_remo_to_dynamo"
   handler       = "nature_remo_to_dynamo.handler"
   role          = aws_iam_role.nature_remo_to_dynamo.arn
-  runtime       = "nodejs12.x"
+  runtime       = "nodejs14.x"
 
   filename         = data.archive_file.nature_remo_to_dynamo.output_path
   source_code_hash = data.archive_file.nature_remo_to_dynamo.output_base64sha256
