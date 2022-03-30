@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: '14'
           cache: npm
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Node install
         id: npm-install
