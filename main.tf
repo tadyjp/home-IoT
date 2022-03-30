@@ -2,8 +2,7 @@
 
 
 resource "aws_kinesis_stream" "soracom_button" {
-  name        = "soracom-button"
-  shard_count = 1
+  name = "soracom-button"
 
   stream_mode_details {
     stream_mode = "ON_DEMAND"
