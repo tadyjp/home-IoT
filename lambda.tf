@@ -4,7 +4,7 @@ locals {
 
 data "archive_file" "soracom_button_to_slack" {
   type        = "zip"
-  source_dir  = "lambda/soracom_button_to_slack/dist/main.js"
+  source_dir  = "lambda/soracom_button_to_slack/dist"
   output_path = "archive/${local.function_name}.zip"
 }
 
