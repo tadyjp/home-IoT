@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: '14'
           cache: npm
+        working-directory: lambda/soracom_button_to_slack
 
       - name: Node install
         id: npm-install
