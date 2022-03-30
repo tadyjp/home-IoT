@@ -19,21 +19,21 @@ jobs:
         with:
           node-version: '14'
           cache: npm
-        working-directory: lambda/soracom_button_to_slack
+        working-directory: ./lambda/soracom_button_to_slack
 
       - name: Node install
         id: npm-install
-        working-directory: lambda/soracom_button_to_slack
+        working-directory: ./lambda/soracom_button_to_slack
         run: npm install
 
       - name: Node test
         id: npm-test
-        working-directory: lambda/soracom_button_to_slack
+        working-directory: ./lambda/soracom_button_to_slack
         run: npm test
 
       - name: Node Build
         id: npm-build
-        working-directory: lambda/soracom_button_to_slack
+        working-directory: ./lambda/soracom_button_to_slack
         run: npm build
 
       - name: Setup Terraform
