@@ -1,6 +1,6 @@
 console.log("Loading function");
 
-import { KinesisStreamEvent } from "aws-lambda";
+import { KinesisStreamEvent, KinesisStreamRecord } from "aws-lambda";
 import { MessageEvent, EventRaw } from "./entity/MessageEvent";
 import { Notification } from "./application/Notification";
 import { SlackClient } from "./infrastructure/SlackClient";
@@ -14,7 +14,13 @@ export async function handler(event: KinesisStreamEvent) {
   const slackClient = new SlackClient(slackURL);
   const notification = new Notification(slackClient, mailboxButtonIMEI);
 
-  for (const record of event.Records) {
+  for (const messageEvent of parseEvents(event.Records)) {
+    await notification.execute(messageEvent);
+  }
+}
+
+function* parseEvents(records: KinesisStreamRecord[]) {
+  for (const record of records) {
     // Kinesis data is base64 encoded so decode here
     var body = JSON.parse(
       Buffer.from(record.kinesis.data, "base64").toString("ascii")
@@ -22,7 +28,7 @@ export async function handler(event: KinesisStreamEvent) {
     console.log("Decoded body:", body);
 
     if (body.imei === mailboxButtonIMEI) {
-      const event = new MessageEvent(
+      yield new MessageEvent(
         body.imei,
         new EventRaw(
           body.payloads.clickType,
@@ -31,8 +37,6 @@ export async function handler(event: KinesisStreamEvent) {
           body.payloads.binaryParserEnabled
         )
       );
-
-      await notification.execute(event);
     }
   }
 }

@@ -4,13 +4,13 @@ locals {
 
 data "archive_file" "soracom_button_to_slack" {
   type        = "zip"
-  source_dir  = "lambda"
+  source_dir  = "lambda/soracom_button_to_slack/dist/main.js"
   output_path = "archive/${local.function_name}.zip"
 }
 
 resource "aws_lambda_function" "soracom_button_to_slack" {
   function_name = local.function_name
-  handler       = "index.handler"
+  handler       = "main.handler"
   role          = aws_iam_role.lambda_kinesis_execution.arn
   runtime       = "nodejs14.x"
 
