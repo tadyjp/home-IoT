@@ -1,5 +1,5 @@
-import { Event } from "../entity/Event";
+import { MessageEvent } from "../entity/MessageEvent";
 
-export abstract class IMessageClient {
-  abstract post(event: Event): Promise<void>;
+export interface IMessageClient {
+  post(event: MessageEvent): Promise<void>;
 }

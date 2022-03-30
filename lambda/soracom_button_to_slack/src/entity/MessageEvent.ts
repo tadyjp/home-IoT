@@ -20,6 +20,6 @@ export class EventRaw {
   }
 }
 
-export class Event {
+export class MessageEvent {
   constructor(readonly imei: string, readonly raw: EventRaw) {}
 }

@@ -1,7 +1,7 @@
 console.log("Loading function");
 
 import { KinesisStreamEvent } from "aws-lambda";
-import { Event, EventRaw } from "./entity/Event";
+import { MessageEvent, EventRaw } from "./entity/MessageEvent";
 import { Notification } from "./application/Notification";
 import { SlackClient } from "./infrastructure/SlackClient";
 
@@ -22,7 +22,7 @@ export async function handler(event: KinesisStreamEvent) {
     console.log("Decoded body:", body);
 
     if (body.imei === mailboxButtonIMEI) {
-      const event = new Event(
+      const event = new MessageEvent(
         body.imei,
         new EventRaw(
           body.payloads.clickType,

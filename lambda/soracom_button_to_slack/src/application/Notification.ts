@@ -1,4 +1,4 @@
-import { Event } from "../entity/Event";
+import { MessageEvent } from "../entity/MessageEvent";
 import { IMessageClient } from "./IMessageClient";
 
 export class Notification {
@@ -7,11 +7,13 @@ export class Notification {
     private mailboxButtonIMEI: string
   ) {}
 
-  async execute(event: Event): Promise<void> {
+  async execute(event: MessageEvent): Promise<boolean> {
     if (event.imei !== this.mailboxButtonIMEI) {
-      console.log(`IMEI ${event.imei} is not ${this.mailboxButtonIMEI}`);
-      return;
+      throw new Error(
+        `IMEI mismatch: ${event.imei} is not ${this.mailboxButtonIMEI}`
+      );
     }
-    return await this.client.post(event);
+    await this.client.post(event);
+    return true;
   }
 }

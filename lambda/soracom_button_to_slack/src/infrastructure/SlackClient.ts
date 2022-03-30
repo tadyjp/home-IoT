@@ -1,13 +1,11 @@
 import fetch from "node-fetch";
 import { IMessageClient } from "../application/IMessageClient";
-import { Event } from "../entity/Event";
+import { MessageEvent } from "../entity/MessageEvent";
 
-export class SlackClient extends IMessageClient {
-  constructor(private webhookURL: string) {
-    super();
-  }
+export class SlackClient implements IMessageClient {
+  constructor(private webhookURL: string) {}
 
-  async post(event: Event): Promise<void> {
+  async post(event: MessageEvent): Promise<void> {
     const response = await fetch(this.webhookURL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
