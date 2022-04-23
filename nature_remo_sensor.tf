@@ -3,11 +3,11 @@
 ################################################################################
 
 resource "aws_dynamodb_table" "nature_remo_sensor" {
-  name         = "nature-remo-sensor-2"
+  name         = "nature-remo-sensor"
   billing_mode = "PAY_PER_REQUEST"
 
   attribute {
-    name = "DeviceID"
+    name = "SensorType"
     type = "S"
   }
 
@@ -16,7 +16,7 @@ resource "aws_dynamodb_table" "nature_remo_sensor" {
     type = "N"
   }
 
-  hash_key  = "DeviceID"
+  hash_key  = "SensorType"
   range_key = "Timestamp"
 }
 
@@ -32,7 +32,7 @@ data "archive_file" "nature_remo_to_dynamo" {
 
 resource "aws_lambda_function" "nature_remo_to_dynamo" {
   function_name = "nature_remo_to_dynamo"
-  handler       = "nature_remo_to_dynamo.handler"
+  handler       = "main.handler"
   role          = aws_iam_role.nature_remo_to_dynamo.arn
   runtime       = "nodejs14.x"
 

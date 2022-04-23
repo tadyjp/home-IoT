@@ -34,7 +34,7 @@ data "archive_file" "soracom_button_to_slack" {
 
 resource "aws_lambda_function" "soracom_button_to_slack" {
   function_name = "soracom_button_to_slack"
-  handler       = "soracom_button_to_slack.handler"
+  handler       = "main.handler"
   role          = aws_iam_role.lambda_kinesis_execution.arn
   runtime       = "nodejs14.x"
 
