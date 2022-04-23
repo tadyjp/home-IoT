@@ -14,6 +14,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: npm
+          cache-dependency-path: '**/package-lock.json'
+
+      - name: Node install
+        id: npm-install
+        working-directory: ./lambda/soracom_button_to_slack
+        run: npm install
+
+      - name: Node test
+        id: npm-test
+        working-directory: ./lambda/soracom_button_to_slack
+        run: npm test
+
+      - name: Node Build
+        id: npm-build
+        working-directory: ./lambda/soracom_button_to_slack
+        run: npm build
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
@@ -60,6 +82,7 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
