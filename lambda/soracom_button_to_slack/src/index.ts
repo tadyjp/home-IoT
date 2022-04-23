@@ -19,7 +19,9 @@ export async function handler(event: KinesisStreamEvent) {
   }
 }
 
-function* parseEvents(records: KinesisStreamRecord[]) {
+function parseEvents(records: KinesisStreamRecord[]) {
+  const list = [];
+
   for (const record of records) {
     // Kinesis data is base64 encoded so decode here
     var body = JSON.parse(
@@ -28,15 +30,19 @@ function* parseEvents(records: KinesisStreamRecord[]) {
     console.log("Decoded body:", body);
 
     if (body.imei === mailboxButtonIMEI) {
-      yield new MessageEvent(
-        body.imei,
-        new EventRaw(
-          body.payloads.clickType,
-          body.payloads.clickTypeName,
-          body.payloads.batteryLevel,
-          body.payloads.binaryParserEnabled
+      list.push(
+        new MessageEvent(
+          body.imei,
+          new EventRaw(
+            body.payloads.clickType,
+            body.payloads.clickTypeName,
+            body.payloads.batteryLevel,
+            body.payloads.binaryParserEnabled
+          )
         )
       );
     }
   }
+
+  return list;
 }
