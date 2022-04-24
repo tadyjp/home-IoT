@@ -29,12 +29,12 @@ jobs:
       - name: Node test (soracom_button_to_slack)
         id: npm-test-soracom_button_to_slack
         working-directory: ./lambda/soracom_button_to_slack
-        run: npm test
+        run: npm run test
 
       - name: Node Build (soracom_button_to_slack)
         id: npm-build-soracom_button_to_slack
         working-directory: ./lambda/soracom_button_to_slack
-        run: npm build
+        run: npm run build
 
       - name: Node install (nature_remo_to_dynamo)
         id: npm-install-nature_remo_to_dynamo
@@ -44,12 +44,12 @@ jobs:
       # - name: Node test (nature_remo_to_dynamo)
       #   id: npm-test-nature_remo_to_dynamo
       #   working-directory: ./lambda/nature_remo_to_dynamo
-      #   run: npm test
+      #   run: npm run test
 
       - name: Node Build (nature_remo_to_dynamo)
         id: npm-build-nature_remo_to_dynamo
         working-directory: ./lambda/nature_remo_to_dynamo
-        run: npm build
+        run: npm run build
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
