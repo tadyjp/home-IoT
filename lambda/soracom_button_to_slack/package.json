@@ -5,9 +5,7 @@
   "author": "Masato TADA<a.dat.jp@gmail.com>",
   "license": "MIT",
   "main": "dist/main.js",
-  "dependencies": {
-    "node-fetch": "^3.2.3"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/aws-lambda": "^8.10.93",
     "@types/jest": "^27.4.1",
@@ -20,7 +18,7 @@
     "typescript": "^4.6.3"
   },
   "scripts": {
-    "build": "rm -rf ./dist/*; tsc src/index.ts --noEmit && esbuild src/index.ts --outfile=dist/main.js --bundle --platform=node --target=es2020",
+    "build": "rm -rf ./dist/*; tsc src/index.ts --noEmit && esbuild src/index.ts --outfile=dist/main.js --bundle --platform=node --target=es2020 --external:aws-lambda",
     "test": "jest"
   }
 }
