@@ -31,7 +31,7 @@ export class SlackClient implements IMessageClient {
     });
 
     if (response.status !== 200) {
-      throw new Error("Failed to post to slack: status=" + response.status);
+      throw new Error("failed to post to slack: status=" + response.status);
     }
   }
 }

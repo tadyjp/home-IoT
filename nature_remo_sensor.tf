@@ -1,4 +1,12 @@
 ################################################################################
+# Variables
+################################################################################
+
+variable "nature_api_token" {
+  description = "Nature Remo Cloud API Token"
+}
+
+################################################################################
 # DynamoDB
 ################################################################################
 
@@ -39,12 +47,11 @@ resource "aws_lambda_function" "nature_remo_to_dynamo" {
   filename         = data.archive_file.nature_remo_to_dynamo.output_path
   source_code_hash = data.archive_file.nature_remo_to_dynamo.output_base64sha256
 
-  # environment {
-  #   variables = {
-  #     slack_url           = var.slack_url
-  #     mailbox_button_imei = var.mailbox_button_imei
-  #   }
-  # }
+  environment {
+    variables = {
+      NATURE_API_TOKEN = var.nature_api_token
+    }
+  }
 
   depends_on = [aws_cloudwatch_log_group.nature_remo_to_dynamo]
 }
@@ -87,10 +94,31 @@ resource "aws_iam_role" "nature_remo_to_dynamo" {
   }
 }
 
+resource "aws_cloudwatch_log_group" "nature_remo_to_dynamo" {
+  name              = "/aws/lambda/nature_remo_to_dynamo"
+  retention_in_days = 14
+}
+
 ################################################################################
-# CloudWatch Logs
+# CloudWatch Scheduled Event
 ################################################################################
 
-resource "aws_cloudwatch_log_group" "nature_remo_to_dynamo" {
-  name = "/aws/lambda/nature_remo_to_dynamo"
+resource "aws_cloudwatch_event_rule" "nature_remo_to_dynamo" {
+  name                = "nature_remo_to_dynamo_every_minutes"
+  description         = "Run nature_remo_to_dynamo every minutes"
+  schedule_expression = "cron(* * * * ? *)"
+}
+
+resource "aws_cloudwatch_event_target" "output_report_every_month" {
+  rule      = aws_cloudwatch_event_rule.nature_remo_to_dynamo.name
+  target_id = "nature_remo_to_dynamo"
+  arn       = aws_lambda_function.nature_remo_to_dynamo.arn
+}
+
+resource "aws_lambda_permission" "nature_remo_to_dynamo" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.nature_remo_to_dynamo.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.nature_remo_to_dynamo.arn
 }
