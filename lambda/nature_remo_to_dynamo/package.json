@@ -5,9 +5,7 @@
   "author": "",
   "license": "MIT",
   "main": "dist/main.js",
-  "dependencies": {
-    "node-fetch": "^3.2.3"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/aws-lambda": "^8.10.95",
     "@types/jest": "^27.4.1",
@@ -22,7 +20,7 @@
     "typescript": "^4.6.3"
   },
   "scripts": {
-    "build": "rm -rf ./dist/*; tsc src/index.ts --noEmit && esbuild src/index.ts --outfile=dist/main.js --bundle --platform=node --target=es2020",
+    "build": "rm -rf ./dist/*; tsc src/index.ts --noEmit && esbuild src/index.ts --outfile=dist/main.js --bundle --platform=node --target=es2020 --external:aws-sdk --external:aws-lambda",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
