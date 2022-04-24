@@ -21,19 +21,34 @@ jobs:
           cache: npm
           cache-dependency-path: '**/package-lock.json'
 
-      - name: Node install
-        id: npm-install
+      - name: Node install (soracom_button_to_slack)
+        id: npm-install-soracom_button_to_slack
         working-directory: ./lambda/soracom_button_to_slack
         run: npm install
 
-      - name: Node test
-        id: npm-test
+      - name: Node test (soracom_button_to_slack)
+        id: npm-test-soracom_button_to_slack
         working-directory: ./lambda/soracom_button_to_slack
         run: npm test
 
-      - name: Node Build
-        id: npm-build
+      - name: Node Build (soracom_button_to_slack)
+        id: npm-build-soracom_button_to_slack
         working-directory: ./lambda/soracom_button_to_slack
+        run: npm build
+
+      - name: Node install (nature_remo_to_dynamo)
+        id: npm-install-nature_remo_to_dynamo
+        working-directory: ./lambda/nature_remo_to_dynamo
+        run: npm install
+
+      # - name: Node test (nature_remo_to_dynamo)
+      #   id: npm-test-nature_remo_to_dynamo
+      #   working-directory: ./lambda/nature_remo_to_dynamo
+      #   run: npm test
+
+      - name: Node Build (nature_remo_to_dynamo)
+        id: npm-build-nature_remo_to_dynamo
+        working-directory: ./lambda/nature_remo_to_dynamo
         run: npm build
 
       - name: Setup Terraform
