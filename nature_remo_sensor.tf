@@ -34,7 +34,7 @@ resource "aws_dynamodb_table" "nature_remo_sensor" {
 
 data "archive_file" "nature_remo_to_dynamo" {
   type        = "zip"
-  source_dir  = "lambda"
+  source_dir  = "lambda/nature_remo_to_dynamo/dist"
   output_path = "archive/nature_remo_to_dynamo.zip"
 }
 
