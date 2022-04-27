@@ -6,32 +6,29 @@ export class SlackClient implements IMessageClient {
   constructor(private webhookURL: string) {}
 
   async post(event: MessageEvent): Promise<void> {
-    await post(
+    const body = await post(
       this.webhookURL,
-      {},
+      { "Content-Type": "application/json" },
       JSON.stringify({
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          text: "ポストに投函されたよ :mailbox_with_mail:",
-          blocks: [
-            {
-              type: "section",
-              text: {
-                type: "mrkdwn",
-                text: "ポストに投函されたよ :mailbox_with_mail:",
-              },
+        text: "ポストに投函されたよ :mailbox_with_mail:",
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "ポストに投函されたよ :mailbox_with_mail:",
             },
-            {
-              type: "section",
-              text: {
-                type: "mrkdwn",
-                text: "```" + event.raw.printMarkdown() + "```",
-              },
+          },
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "```" + event.raw.printMarkdown() + "```",
             },
-          ],
-        }),
+          },
+        ],
       })
     );
+    console.log(`response body: ${body}`);
   }
 }
