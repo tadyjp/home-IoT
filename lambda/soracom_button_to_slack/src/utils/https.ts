@@ -4,7 +4,7 @@ export function post(
   _url: string,
   headers: any,
   payload: string
-): Promise<any> {
+): Promise<string> {
   const url = new URL(_url);
 
   const options = {
@@ -25,7 +25,7 @@ export function post(
       });
 
       res.on("end", function () {
-        resolve(JSON.parse(body));
+        resolve(body);
       });
 
       res.on("error", function (e) {

@@ -1,6 +1,6 @@
 import * as https from "https";
 
-export function get(_url: string, headers: any): Promise<any> {
+export function get(_url: string, headers: any): Promise<string> {
   const url = new URL(_url);
 
   const options = {
@@ -21,7 +21,7 @@ export function get(_url: string, headers: any): Promise<any> {
       });
 
       res.on("end", function () {
-        resolve(JSON.parse(body));
+        resolve(body);
       });
 
       res.on("error", function (e) {

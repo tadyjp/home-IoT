@@ -37,18 +37,19 @@ class NatureAPIService {
     const body = await get(this.natureDevicesURL, {
       Authorization: `Bearer ${this.natureAPIToken}`,
     });
-    console.log("fetchSensorsData", body);
+    const resData = JSON.parse(body);
+    console.log("fetchSensorsData", resData);
 
     const list: SensorData[] = [];
 
-    for (const item of body) {
+    for (const item of resData) {
       if (item.newest_events?.te) {
         list.push(
           new SensorData(
             item.serial_number,
             "temperature",
             new Date(item.newest_events.te.created_at),
-            item.newest_events.te.value
+            item.newest_events.te.val
           )
         );
       }
@@ -58,7 +59,7 @@ class NatureAPIService {
             item.serial_number,
             "humidity",
             new Date(item.newest_events.hu.created_at),
-            item.newest_events.hu.value
+            item.newest_events.hu.val
           )
         );
       }
@@ -68,7 +69,7 @@ class NatureAPIService {
             item.serial_number,
             "illuminance",
             new Date(item.newest_events.il.created_at),
-            item.newest_events.il.value
+            item.newest_events.il.val
           )
         );
       }
@@ -78,7 +79,7 @@ class NatureAPIService {
             item.serial_number,
             "motion",
             new Date(item.newest_events.mo.created_at),
-            item.newest_events.mo.value
+            item.newest_events.mo.val
           )
         );
       }
@@ -88,14 +89,15 @@ class NatureAPIService {
   }
 
   async fetchSmartMeterData(): Promise<SensorData[]> {
-    const body = await get(this.natureDevicesURL, {
+    const body = await get(this.natureAppliancesURL, {
       Authorization: `Bearer ${this.natureAPIToken}`,
     });
-    console.log("fetchSmartMeterData", body);
+    const resData = JSON.parse(body);
+    console.log("fetchSmartMeterData", resData);
 
     const list: SensorData[] = [];
 
-    for (const item of body) {
+    for (const item of resData) {
       if (!item.smart_meter) {
         continue;
       }
@@ -131,7 +133,7 @@ function dynamoPutItem(
   };
 
   return new Promise((resolve, reject) => {
-    dynamoDB.putItem(params, function (err, data) {
+    dynamoDB.putItem(params, function (err, _data) {
       if (err) {
         reject(err);
       } else {
@@ -148,18 +150,23 @@ async function processEvents(
 ) {
   const sensorDataList = await natureAPIService.fetchSensorsData();
   for (const sensorData of sensorDataList) {
-    dynamoPutItem(dynamoDB, dynamoTable, sensorData);
+    dynamoPutItem(dynamoDB, dynamoTable, sensorData).catch((err) => {
+      console.error(err);
+    });
   }
 
   const smartMeterDataList = await natureAPIService.fetchSmartMeterData();
+  console.log("smartMeterDataList", smartMeterDataList);
   for (const sensorData of smartMeterDataList) {
-    dynamoPutItem(dynamoDB, dynamoTable, sensorData);
+    dynamoPutItem(dynamoDB, dynamoTable, sensorData).catch((err) => {
+      console.error(err);
+    });
   }
 }
 
-export async function handler(event: ScheduledEvent) {
+export async function handler(_event: ScheduledEvent) {
   const dynamo = new AWS.DynamoDB();
   const natureAPIService = new NatureAPIService(natureAPIToken);
 
-  processEvents(dynamo, dynamoTable, natureAPIService);
+  await processEvents(dynamo, dynamoTable, natureAPIService);
 }
